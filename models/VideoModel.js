@@ -17,16 +17,13 @@ const VideoSchema = mongoose.Schema({
     type: String,
   },
   views: {
-    type: Number,
-    default: 0,
+    type: Array,
   },
   likes: {
-    type: Number,
-    default: 0,
+    type: Array,
   },
   dislikes: {
-    type: Number,
-    default: 0,
+    type: Array,
   },
   uploadedOn: {
     type: Date,

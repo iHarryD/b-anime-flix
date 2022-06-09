@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const PlaylistSchema = require("./PlaylistModel");
 
 const UserSchema = mongoose.Schema({
   firstName: {
@@ -23,13 +24,13 @@ const UserSchema = mongoose.Schema({
     required: true,
   },
   history: {
-    type: Array,
+    type: [mongoose.SchemaTypes.ObjectId],
   },
   playlists: {
-    type: Array,
+    type: [PlaylistSchema],
   },
   watchLater: {
-    type: Array,
+    type: [mongoose.SchemaTypes.ObjectId],
   },
   preferences: {
     type: Object,

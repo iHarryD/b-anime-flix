@@ -41,10 +41,14 @@ router.post("/login", async (req, res, next) => {
     );
     if (!passwordMatches)
       return res.status(401).send({ message: wrongCredentialsMessage });
-    const token = jwt.sign({ user: userData._id }, process.env.TOKEN_SECRET);
+    const token = jwt.sign(
+      { user: userData._id, password: userData.password },
+      process.env.TOKEN_SECRET
+    );
     res.status(200).send({
       message: "Successfully logged in!",
       firstName: userData.firstName,
+      _id: userData._id,
       token,
     });
   } catch (err) {

@@ -5,6 +5,10 @@ const mongoose = require("mongoose");
 const server = express();
 const authRoutes = require("./api/authRoutes");
 const videoRoutes = require("./api/videoRoutes");
+const userRoutes = require("./api/userRoutes");
+const playlistRoutes = require("./api/playlistRoutes");
+const historyRoutes = require("./api/historyRoutes");
+const watchLaterRoutes = require("./api/watchLaterRoutes");
 require("dotenv").config();
 
 mongoose.connect(process.env.DB_PASSKEY, () => console.log("connected to db"));
@@ -24,5 +28,9 @@ server.use(session(sessionOptions));
 server.use(express.json());
 server.use("/api", authRoutes);
 server.use("/api", videoRoutes);
+server.use("/api", userRoutes);
+server.use("/api", playlistRoutes);
+server.use("/api", historyRoutes);
+server.use("/api", watchLaterRoutes);
 
 server.listen(process.env.PORT || 3001);
