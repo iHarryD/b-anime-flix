@@ -4,7 +4,7 @@ const videoIDVerification = require("../middlewares/videoIDVerification");
 const users = require("../models/UserModel");
 const videos = require("../models/VideoModel");
 
-router.get("/watch-later/fetch", tokenVerification, (req, res) => {
+router.get("/watch-later", tokenVerification, (req, res) => {
   users.findById(req.user, (err, doc) => {
     if (err) return res.status(500).send({ message: "Something went wrong." });
     res.status(200).send(doc.watchLater);
@@ -22,12 +22,12 @@ router.get("/watch-later/fetch-videos", tokenVerification, (req, res) => {
   });
 });
 
-router.patch(
-  "/watch-later/add",
+router.post(
+  "/watch-later/:id",
   tokenVerification,
   videoIDVerification,
   (req, res) => {
-    const videoID = req.query.videoID;
+    const { id: videoID } = req.params;
     users.findByIdAndUpdate(
       req.user,
       { $addToSet: { watchLater: videoID } },
@@ -41,12 +41,12 @@ router.patch(
   }
 );
 
-router.patch(
-  "/watch-later/remove",
+router.delete(
+  "/watch-later/:id",
   tokenVerification,
   videoIDVerification,
   (req, res) => {
-    const videoID = req.query.videoID;
+    const { id: videoID } = req.params;
     users.findByIdAndUpdate(
       req.user,
       { $pull: { watchLater: videoID } },
