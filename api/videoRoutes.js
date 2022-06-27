@@ -23,24 +23,30 @@ router.get("/video/fetch", (req, res) => {
   });
 });
 
-router.post("/video/post", tokenVerification, async (req, res) => {
+router.post("/video/post", tokenVerification, (req, res) => {
   const { error } = videoJoiVerification(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  try {
-    const newVideo = new videos({
-      title: req.body.title,
-      url: req.body.url,
-      description: req.body.description,
-      views: req.body.views,
-      likes: req.body.likes,
-      dislikes: req.body.dislikes,
-      uploadedBy: req.user,
-    });
-    await newVideo.save();
-    res.status(200).send(newVideo);
-  } catch (err) {
-    res.status(500).send({ message: "Something went wrong." });
-  }
+  users.findById(req.user, (err, doc) => {
+    videos.create(
+      {
+        title: req.body.title,
+        url: req.body.url,
+        description: req.body.description,
+        views: req.body.views,
+        likes: req.body.likes,
+        dislikes: req.body.dislikes,
+        uploadedBy: {
+          name: doc.firstName,
+          id: doc._id,
+        },
+      },
+      (err, doc) => {
+        if (err)
+          return res.status(500).send({ message: "Something went wrong." });
+        res.status(200).send(doc);
+      }
+    );
+  });
 });
 
 router.patch(
@@ -114,5 +120,12 @@ router.patch(
     );
   }
 );
+
+router.patch("/video/add-user-to-all", (req, res) => {
+  videos.find({}, (err, doc) => {
+    if (err) return res.send("error");
+    res.send(doc);
+  });
+});
 
 module.exports = router;

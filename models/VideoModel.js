@@ -14,7 +14,18 @@ const VideoSchema = mongoose.Schema({
     required: true,
   },
   uploadedBy: {
-    type: String,
+    _id: false,
+    type: {
+      name: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: String,
+        required: true,
+      },
+    },
+    required: true,
   },
   views: {
     type: Array,
