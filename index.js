@@ -9,6 +9,7 @@ const userRoutes = require("./api/userRoutes");
 const playlistRoutes = require("./api/playlistRoutes");
 const historyRoutes = require("./api/historyRoutes");
 const watchLaterRoutes = require("./api/watchLaterRoutes");
+const commentRoutes = require("./api/commentRoutes");
 require("dotenv").config();
 
 mongoose.connect(process.env.DB_PASSKEY, () => console.log("connected to db"));
@@ -32,5 +33,6 @@ server.use("/api", userRoutes);
 server.use("/api", playlistRoutes);
 server.use("/api", historyRoutes);
 server.use("/api", watchLaterRoutes);
+server.use("/api", commentRoutes);
 
 server.listen(process.env.PORT || 3001);
