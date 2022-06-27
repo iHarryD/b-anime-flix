@@ -22,42 +22,32 @@ router.get("/watch-later/fetch-videos", tokenVerification, (req, res) => {
   });
 });
 
-router.post(
-  "/watch-later/:id",
-  tokenVerification,
-  videoIDVerification,
-  (req, res) => {
-    const { id: videoID } = req.params;
-    users.findByIdAndUpdate(
-      req.user,
-      { $addToSet: { watchLater: videoID } },
-      { new: true },
-      (err, doc) => {
-        if (err)
-          return res.status(300).send({ message: "Something went wrong." });
-        res.status(200).send(doc.watchLater);
-      }
-    );
-  }
-);
+router.post("/watch-later/:id", tokenVerification, (req, res) => {
+  const { id: videoID } = req.params;
+  users.findByIdAndUpdate(
+    req.user,
+    { $addToSet: { watchLater: videoID } },
+    { new: true },
+    (err, doc) => {
+      if (err)
+        return res.status(300).send({ message: "Something went wrong." });
+      res.status(200).send(doc.watchLater);
+    }
+  );
+});
 
-router.delete(
-  "/watch-later/:id",
-  tokenVerification,
-  videoIDVerification,
-  (req, res) => {
-    const { id: videoID } = req.params;
-    users.findByIdAndUpdate(
-      req.user,
-      { $pull: { watchLater: videoID } },
-      { new: true },
-      (err, doc) => {
-        if (err)
-          return res.status(300).send({ message: "Something went wrong." });
-        res.status(200).send(doc.watchLater);
-      }
-    );
-  }
-);
+router.delete("/watch-later/:id", tokenVerification, (req, res) => {
+  const { id: videoID } = req.params;
+  users.findByIdAndUpdate(
+    req.user,
+    { $pull: { watchLater: videoID } },
+    { new: true },
+    (err, doc) => {
+      if (err)
+        return res.status(300).send({ message: "Something went wrong." });
+      res.status(200).send(doc.watchLater);
+    }
+  );
+});
 
 module.exports = router;
