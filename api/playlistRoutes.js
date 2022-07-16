@@ -46,7 +46,7 @@ router.post("/playlists", tokenVertification, (req, res) => {
   });
 });
 
-router.delete("/playlists", tokenVertification, (req, res) => {
+router.delete("/playlists/:id", tokenVertification, (req, res) => {
   const { id } = req.params;
   const playlistID = mongoose.Types.ObjectId(id);
   if (!playlistID)
