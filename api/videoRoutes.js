@@ -5,8 +5,29 @@ const videoIDVerification = require("../middlewares/videoIDVerification");
 const videoJoiVerification = require("../validations/videoJoiValidation");
 
 router.get("/video/fetch-all", async (req, res) => {
+  const requestedPage = req.query.page ? parseInt(req.query.page) : 1;
+  const vidoesInOnePage = 9;
+  const searchQuery = req.query.query;
   try {
-    const data = await videos.find();
+    const filter = {};
+    if (searchQuery) {
+      filter.title = { $regex: searchQuery, $options: "gi" };
+    }
+    const allVideos = await videos.find(filter);
+    const videosToSend = allVideos.slice(
+      (requestedPage - 1) * vidoesInOnePage,
+      requestedPage * vidoesInOnePage
+    );
+    const data = {
+      currentPage: requestedPage,
+      nextPage:
+        allVideos.length > requestedPage * vidoesInOnePage
+          ? requestedPage + 1
+          : null,
+      resultCount: videosToSend.length,
+      videos: videosToSend,
+    };
+
     res.status(200).send(data);
   } catch (err) {
     res.status(500).send({ message: "Something went wrong." });
