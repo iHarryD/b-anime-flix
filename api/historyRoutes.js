@@ -25,11 +25,18 @@ router.post("/history/:id", tokenVerification, (req, res) => {
   const { id: videoID } = req.params;
   users.findByIdAndUpdate(
     req.user,
-    { $addToSet: { history: videoID } },
-    { new: true },
+    { $pull: { history: videoID } },
     (err, doc) => {
       if (err) return res.status(500).send({ message: err });
-      res.status(200).send(doc.history);
+      users.findByIdAndUpdate(
+        req.user,
+        { $addToSet: { history: videoID } },
+        { new: true },
+        (err, doc) => {
+          if (err) return res.status(500).send({ message: err });
+          res.status(200).send(doc.history);
+        }
+      );
     }
   );
 });
