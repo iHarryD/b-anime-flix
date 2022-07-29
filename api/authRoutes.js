@@ -46,9 +46,10 @@ router.post("/login", async (req, res, next) => {
       process.env.TOKEN_SECRET
     );
     res.status(200).send({
-      message: "Successfully logged in!",
-      firstName: userData.firstName,
       _id: userData._id,
+      email: userData.email,
+      firstName: userData.firstName,
+      message: "Successfully logged in!",
       token,
     });
   } catch (err) {
